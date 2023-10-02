@@ -5,10 +5,13 @@ import { Link } from "react-router-dom"
 import { AucthLayout } from '../layout/AucthLayout';
 
 import { useForm } from '../../hooks';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { checkingAuthentication, startGoogleSignIn } from '../../store/auth';
+import { useMemo } from 'react';
 
 export const LoginPage = () => {
+
+    const { status } = useSelector( state => state.auth);
 
     const dispatch = useDispatch();
 
@@ -16,6 +19,8 @@ export const LoginPage = () => {
         email: 'marily46@live.com',
         password: '123456'
     });
+
+    const isAucthentication = useMemo( () => status === 'checking', [status]) //quede aqui
     
     const onSubmit = ( event ) => {
         event.preventDefault();
@@ -61,7 +66,9 @@ export const LoginPage = () => {
 
             <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
                 <Grid item xs={12} sm={6}>
-                <Button type="submit" variant="contained" fullWidth>
+                <Button 
+                disabled = { isAucthentication }
+                type="submit" variant="contained" fullWidth>
                     Login
                 </Button>
                 </Grid>
